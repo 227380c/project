@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.dao.StudentDao">
+
+	<resultMap id="BaseResultMap" type="com.example.model.Student">
+		<result column="id" property="id" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="CHAR"/>
+		<result column="niceName" property="niceName" jdbcType="CHAR"/>
+		<result column="age" property="age" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<!-- 使用#{}时形成的sql语句，已经带有引号，参数默认为字符串，防止sql注入
+	使用${}时形成的sql语句，不会当做字符串处理，原来是什么类型就是什么 -->
+	<parameterMap id="Student" type="com.example.model.Student" />
+
+	<sql id="Base_Column_List">
+		id, name, niceName, age
+	</sql>
+
+	<!-- 获取学生列表 -->
+	<select id="getStudentList" resultMap="BaseResultMap" >
+		select
+		<include refid="Base_Column_List" />
+		from st_student
+	</select>
+
+	<!-- 根据用户 ID，获取用学生信息 -->
+	<select id="findStudentById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from st_student
+		where id = #{id}
+	</select>
+	
+	<!-- 添加学生信息 -->
+	<insert id="save" parameterMap="Student" useGeneratedKeys="true" keyProperty="id">
+		insert into	st_student
+		 <trim prefix="(" suffix=")" suffixOverrides=",">
+	      <if test="id != null and id !='' ">
+	        id,
+	      </if>
+	       <if test="name != null and name !='' ">
+	        name,
+	      </if>
+	      <if test="niceName != null and niceName !='' ">
+	        niceName,
+	      </if>
+	       <if test="age != null and age !='' ">
+	        age,
+	      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null and id !='' ">
+	      	#{id},
+	      </if>
+	      <if test="name != null and name !='' ">
+	      	#{name},
+	      </if>
+	      <if test="niceName != null and niceName !='' ">
+	        #{niceName},
+	      </if>
+	      <if test="age != null and age !='' ">
+	        #{age},
+	      </if>
+	    </trim>		
+	</insert>
+	
+	<!-- 修改学生信息 -->
+	<update id="update" parameterMap="Student">
+		update	st_student  set
+	      <if test="name != null and name !='' ">
+	      	name = #{name},
+	      </if>
+	      <if test="niceName != null and niceName !='' ">
+	        niceName = #{niceName},
+	      </if>
+	      <if test="age != null and age !='' ">
+	        age = #{age}
+	      </if>
+		where id = #{id}
+	</update>
+	
+	<!-- 根据学生 ID，删除学生信息 -->
+	<delete id="delete" parameterType="java.lang.Long">
+		delete from	st_student where id = #{id}
+	</delete>
+
+</mapper>

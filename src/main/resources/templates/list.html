@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>userList</title>
+    <link rel="stylesheet" th:href="@{css/bootstrap.css}"></link>
+</head>
+<body class="container">
+<br/>
+<h1><a th:href="@{/list}">用户列表</a></h1>
+<br/><br/>
+<div class="with:80%">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>NiceName</th>
+            <th>Age</th>
+            <th colspan="2">
+            	<a href="/toAdd" th:href="@{/toAdd}" class="btn btn-info">添加</a>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr  th:each="user : ${userList}">
+            <th th:text="${user.id}"></th>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.niceName}"></td>
+            <td th:text="${user.age}"></td>
+            <td>
+	            <a th:href="@{/show(id=${user.id})}" class="btn btn-info">详细</a>
+	            <a th:href="@{/toEdit(id=${user.id})}" class="btn btn-info">编辑</a>
+	            <a th:href="@{/delete(id=${user.id})}" class="btn btn-info">删除</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
